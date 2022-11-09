@@ -34,6 +34,7 @@ public class CustemWebApplicationServer {
             while ((clientSocker = serverSocket.accept()) != null) {
                 logger.info("[CustemWebApplicationServer] client connected!");
 
+
                 // Step3 - Thread Pool을 적용해 안정적인 서비스가 가능하도록 한다.
                 executorService.execute(new ClientRequestHandler(clientSocker));
             }
