@@ -9,10 +9,14 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class CustemWebApplicationServer {
 
     private final int port;
+
+    private final ExecutorService executorService = Executors.newFixedThreadPool(10);
 
     private static final Logger logger = LoggerFactory.getLogger(CustemWebApplicationServer.class);
 
@@ -30,8 +34,8 @@ public class CustemWebApplicationServer {
             while ((clientSocker = serverSocket.accept()) != null) {
                 logger.info("[CustemWebApplicationServer] client connected!");
 
-                new Thread(new ClientRequestHandler(clientSocker)).start();
-
+                // Step3 - Thread Pool을 적용해 안정적인 서비스가 가능하도록 한다.
+                executorService.execute(new ClientRequestHandler(clientSocker));
             }
 
         }
